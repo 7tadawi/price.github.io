@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>رحلة التسعير: المستوى المتقدم</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--tx:#1c2430;--mu:#6b7686;--pr:#6d28d9;--prs:#ede9fe;--ok:#15803d;--oks:#dcfce7;--bad:#b91c1c;--bads:#fee2e2;--bd:#e2e6ec;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10151c;--card:#1a212b;--tx:#e8edf3;--mu:#9aa6b6;--pr:#a78bfa;--prs:#2e2358;--ok:#4ade80;--oks:#14532d;--bad:#f87171;--bads:#4c1d1d;--bd:#2b3441;color-scheme:dark}}
+*{box-sizing:border-box}
+html{scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Tahoma,"Segoe UI",system-ui,sans-serif;line-height:1.8}
+header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--card);border-bottom:1px solid var(--bd);padding:10px 16px;z-index:5}
+header b{font-size:15px}
+.bar{height:8px;background:var(--bd);border-radius:9px;margin-top:6px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--pr);transition:width .5s}
+main{max-width:680px;margin:0 auto;padding:16px}
+.intro{background:var(--prs);border-radius:14px;padding:14px 16px;margin-bottom:14px}
+.badge{display:inline-block;background:var(--pr);color:var(--card);border-radius:20px;padding:0 12px;font-size:13px;font-weight:700;margin-bottom:6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px 16px;margin-bottom:14px}
+.card.lock{opacity:.5}
+.card.lock .b{display:none}
+.h{display:flex;align-items:center;gap:10px}
+.h h2{font-size:17px;margin:0;flex:1}
+.n{width:30px;height:30px;border-radius:50%;background:var(--pr);color:var(--card);display:grid;place-items:center;font-weight:700;flex:none}
+.ic{font-size:18px}
+.card:not(.lock):not(.done) .ic{display:none}
+.card.done .n{background:var(--ok)}
+.b p{margin:10px 0}
+.b .ex{background:var(--bg);border-radius:10px;padding:8px 12px;font-size:14px;color:var(--mu)}
+button{font:inherit;cursor:pointer;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;padding:9px 12px;text-align:start}
+button.go{background:var(--pr);color:var(--card);border:0;font-weight:700;width:100%;text-align:center;margin-top:10px}
+button:disabled{opacity:.45;cursor:not-allowed}
+.opts{display:grid;gap:8px;margin:8px 0}
+.opts button.ok{background:var(--oks);border-color:var(--ok)}
+.opts button.bad{background:var(--bads);border-color:var(--bad)}
+.fb{font-size:14px;margin:4px 0 10px;min-height:1px}
+.q{font-weight:700;margin-top:12px}
+label{display:block;font-size:14px;margin-top:10px}
+input[type=range]{width:100%;accent-color:var(--pr)}
+.out{background:var(--prs);border-radius:10px;padding:10px 12px;margin-top:10px;font-weight:700}
+.fin{text-align:center;background:var(--oks);border-radius:14px;padding:18px;display:none}
+.fin.show{display:block}
+.fin a{color:var(--pr);font-weight:700}
+</style>
+</head>
+<body>
+<header><b>المستوى المتقدم: <span id="pc">0</span> / 6</b><div class="bar"><i id="pb"></i></div></header>
+<main>
+<div class="intro"><span class="badge">المستوى 2</span><br>هذا المستوى يبني على مراحل الرحلة الأولى (التكلفة، المنافسون، القيمة، النفسي، الاستراتيجي، الحديث، الاستشاري، قوة التسعير، التفاوض). هنا ننتقل من فهم الطرق إلى هندستها: أرقام، مرونة، تقسيم، باقات، عقود مركّبة، ثم حالة ختامية.</div>
+<div id="list"></div>
+<div class="fin" id="fin"><h2>🚀 أتممت المستوى المتقدم</h2><p>صرت تحسب نقطة التعادل، وتقيس مرونة الطلب، وتقسّم العملاء، وتصمم الباقات، وتركّب العقود، وتختار النموذج المناسب لكل حالة.</p><button class="go" id="again">ابدأ المستوى من جديد</button><p><a href="https://claude.ai/artifact/L7odwDoaDEzJTde44YnxXh" target="_blank" rel="noopener">العودة إلى المستوى الأول</a></p></div>
+</main>
+<script>
+var S=[
+{t:"نقطة التعادل وهامش المساهمة",k:"be",p:"قبل أي تسعير متقدم اعرف كم وحدة تبيع لتغطي تكاليفك. هامش المساهمة = السعر − التكلفة المتغيرة للوحدة، ونقطة التعادل = التكاليف الثابتة ÷ هامش المساهمة.",ex:"حرّك الأشرطة الثلاثة وشاهد كيف يغيّر سعر واحد حجم المبيعات المطلوب."},
+{t:"مرونة الطلب",k:"el",p:"المرونة = نسبة تغيّر الكمية ÷ نسبة تغيّر السعر. إن كانت أكبر من 1 فالطلب مرن (العميل حساس للسعر)، وإن كانت أقل من 1 فهو غير مرن (العميل يتحمل الزيادة).",ex:"جرّب سعراً مختلفاً ومرونة مختلفة وشاهد أثرهما على الإيراد."},
+{t:"تقسيم العملاء وتمييز الأسعار",k:"quiz",p:"العملاء لا يقدّرون المنتج بالقدر نفسه. تمييز الأسعار يعني أن تبيع المنتج نفسه بأسعار مختلفة لفئات مختلفة بحسب استعدادها للدفع، بشرط ألا يستطيع عميل الفئة الغالية شراءه من الفئة الرخيصة.",q:[{q:"جامعة تعطي خصماً للطلاب بإثبات الهوية الطلابية. أي نوع من التمييز هذا؟",o:[["تمييز بالفئة","صحيح: السعر يختلف بحسب فئة العميل، والإثبات يمنع التحايل."],["تمييز بالوقت","لا، الوقت ليس هو الأساس هنا."],["تمييز بالكمية","لا، الخصم لا يرتبط بحجم الشراء."]],a:0},{q:"شركة طيران ترفع سعر المقعد كلما اقترب موعد الرحلة. على أي أساس تميّز؟",o:[["بالفئة","لا، الراكب نفسه قد يحجز مبكراً أو متأخراً."],["بالوقت وإلحاح الحاجة","صحيح: من يحجز متأخراً أقل حساسية للسعر وأشد حاجة."],["بالكمية","لا."]],a:1}]},
+{t:"هندسة الباقات: جيد، أفضل، الأفضل",k:"quiz",p:"ثلاث باقات تقود العميل إلى خيار تريده أنت. الباقة العليا ترفع تقدير العميل للمتوسطة (أثر المرساة)، والدنيا تدخل الحذرين. المهم أن تختلف الباقات في القيمة لا في حذف الأساسيات.",q:[{q:"باقات: أساسية 2,000، احترافية 5,000، مؤسسية 9,000. هدفك أن يختار أغلب العملاء الاحترافية. ما دور المؤسسية؟",o:[["مرساة تجعل الاحترافية تبدو معقولة","صحيح: السعر الأعلى يعيد ضبط مقياس المقارنة في ذهن العميل."],["باقة لا يشتريها أحد ولا قيمة لها","لا، لها دور مهم حتى لو قلّ مشتروها."],["لخفض مبيعات الأساسية","لا، ليس هذا هدفها."]],a:0},{q:"ما أصح قاعدة للتفريق بين الباقات؟",o:[["حذف ميزات أساسية من الدنيا لتصبح غير صالحة","هذا يضر الثقة ويدفع العميل للمنافس."],["زيادة القيمة بمستوى الخدمة والنتائج والدعم كلما صعدت","صحيح: الصعود يمنح العميل نتيجة أكبر يستحق دفع الفرق عنها."],["تقليل الفروق حتى لا يتحير العميل","الفروق الواضحة تسهّل القرار ولا تعقّده."]],a:1}]},
+{t:"العقود المركّبة: ثابت + أداء",k:"quiz",p:"يجمع العقد المركّب بين مبلغ ثابت يضمن استمرارك ومكافأة مرتبطة بالنتائج تشارك العميل نجاحه. هو من أقوى أشكال التسعير الاستشاري حين يتردد العميل من الأتعاب الكبيرة.",q:[{q:"عميل متردد من أتعاب ثابتة كبيرة ويخشى ألا يرى نتيجة. ما الأنسب؟",o:[["خفض الأتعاب الثابتة إلى النصف بلا مقابل","تخسر دخلك دون أن تعالج مخاوف العميل من النتيجة."],["أتعاب ثابتة أقل + مكافأة أداء مرتبطة بمؤشرات متفق عليها","صحيح: العميل يطمئن لأن جزءاً منها مرتبط بالنتائج، وأنت تحمي حدك الأدنى."],["الانتقال للتسعير بالساعة","يكافئ البطء ويفقد الشراكة طويلة الأمد."]],a:1},{q:"ما أهم شرط لنجاح عنصر الأداء في العقد؟",o:[["مؤشرات قابلة للقياس ومتفق عليها كتابياً قبل البدء","صحيح: الغموض في المؤشرات هو سبب أغلب نزاعات الأداء."],["أن يحددها العميل وحده لاحقاً","هذا يعرّضك لتغيير المعايير بعد العمل."],["أن تعتمد على انطباع الطرفين","الانطباعات تختلف ولا تصلح أساساً للدفع."]],a:0}]},
+{t:"الحالة الختامية: اختر النموذج الأنسب",k:"quiz",p:"حالة شركة ناشئة تقدم منصة برمجية للشركات. اختر في كل موقف القرار الأنسب.",q:[{q:"منصتك تحقق للعميل وفراً قابلاً للقياس بأضعاف سعرها. كيف تسعّرها؟",o:[["بالتكلفة + هامش","تترك قيمة كبيرة على الطاولة."],["على أساس القيمة المحققة للعميل","صحيح: السعر يتبع القيمة لا التكلفة."],["أرخص من المنافس بـ 20%","يجعلك في حرب أسعار وأنت تملك ميزة قوية."]],a:1},{q:"تكلفة خدمة مستخدم إضافي شبه صفر، وتريد انتشاراً سريعاً ثم تحويلاً إلى الدفع.",o:[["Freemium مع باقات مدفوعة طبقية","صحيح: الانتشار المجاني يغذي التحويل حين تكون تكلفة المجاني منخفضة."],["التسعير الديناميكي","لا يخدم هدف الانتشار هنا."],["القشط بسعر مرتفع جداً","يبطئ الانتشار الذي تريده."]],a:0},{q:"المبيعات تنمو لكن الربح ضعيف. ما أول ما تراجعه؟",o:[["زيادة الإعلانات","قد تزيد المبيعات دون علاج السبب."],["هامش المساهمة وخصومات الصفقات","صحيح: خصومات كثيرة تأكل الهامش، ويحتاج الأمر إلى مقايضات لا تنازلات مجانية."],["إلغاء الباقة العليا","تفقد المرساة وفرص رفع متوسط الصفقة."]],a:1}]}
+];
+var cur=0,doneN=0,list=document.getElementById("list");
+function E(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e}
+function build(){
+list.innerHTML="";cur=0;doneN=0;upd();document.getElementById("fin").classList.remove("show");
+S.forEach(function(s,i){var c=E("section","card"+(i?" lock":""),'<div class="h"><span class="n">'+(i+1)+'</span><h2>'+s.t+'</h2><span class="ic">'+(i?"🔒":"")+'</span></div>');c.appendChild(E("div","b"));list.appendChild(c)});
+open(0)}
+function open(i){var c=list.children[i];c.classList.remove("lock");c.querySelector(".ic").textContent="";var b=c.querySelector(".b"),s=S[i];
+b.appendChild(E("p",0,s.p));if(s.ex)b.appendChild(E("div","ex",s.ex));
+R[s.k](b,s,function(){finish(i)})}
+function finish(i){var c=list.children[i];c.classList.add("done");var ic=c.querySelector(".ic");ic.textContent="✅";ic.style.display="block";doneN++;upd();
+if(i+1<S.length){open(i+1);setTimeout(function(){list.children[i+1].scrollIntoView({behavior:"smooth"})},250)}else{var f=document.getElementById("fin");f.classList.add("show");setTimeout(function(){f.scrollIntoView({behavior:"smooth"})},250)}}
+function upd(){document.getElementById("pc").textContent=doneN;document.getElementById("pb").style.width=(doneN/S.length*100)+"%"}
+function btn(b,txt,fn,dis){var x=E("button","go",txt);x.disabled=!!dis;x.onclick=function(){x.disabled=true;x.style.display="none";fn()};b.appendChild(x);return x}
+var R={
+be:function(b,s,d){var w=E("div",0,'<label>التكاليف الثابتة: <b id="fv"></b> ريال<input type="range" id="f" min="10000" max="200000" step="5000" value="50000"></label><label>سعر البيع: <b id="pv"></b> ريال<input type="range" id="p" min="50" max="500" step="10" value="200"></label><label>التكلفة المتغيرة للوحدة: <b id="vv"></b> ريال<input type="range" id="v" min="10" max="300" step="10" value="120"></label><div class="out" id="o"></div>');b.appendChild(w);
+var t={},g=btn(b,"فهمت نقطة التعادل",d,1);
+function q(x){return w.querySelector("#"+x)}
+function u(){var f=+q("f").value,p=+q("p").value,v=+q("v").value,m=p-v;q("fv").textContent=f;q("pv").textContent=p;q("vv").textContent=v;
+q("o").textContent=m>0?"هامش المساهمة "+m+" ريال للوحدة، ونقطة التعادل "+Math.ceil(f/m)+" وحدة.":"السعر لا يغطي التكلفة المتغيرة: كل مبيعة تزيد خسارتك."}
+["f","p","v"].forEach(function(k){q(k).oninput=function(){t[k]=1;u();g.disabled=!(t.f&&t.p&&t.v)}});u();b.appendChild(E("div","fb","حرّك الأشرطة الثلاثة لتفتح الزر."))},
+el:function(b,s,d){var w=E("div",0,'<label>تغيير السعر: <b id="pv"></b>%<input type="range" id="p" min="-20" max="20" value="0"></label><label>مرونة الطلب: <b id="ev"></b><input type="range" id="e" min="5" max="30" value="15"></label><div class="out" id="o">حرّك الشريطين</div>');b.appendChild(w);
+var t={},g=btn(b,"فهمت المرونة",d,1);
+function q(x){return w.querySelector("#"+x)}
+function u(){var p=+q("p").value,e=+q("e").value/10;q("pv").textContent=p;q("ev").textContent=e.toFixed(1);
+var rc=((1+p/100)*(1-e*p/100)-1)*100,v=e>1?"الطلب مرن: رفع السعر يخفض الإيراد وخفضه يرفعه.":e<1?"الطلب غير مرن: رفع السعر يرفع الإيراد.":"مرونة الوحدة: الإيراد يكاد يثبت.";
+q("o").textContent="تغيّر الإيراد المتوقع "+rc.toFixed(1)+"%. "+v}
+["p","e"].forEach(function(k){q(k).oninput=function(){t[k]=1;u();g.disabled=!(t.p&&t.e)}});u()},
+quiz:function(b,s,d){var n=0;s.q.forEach(function(q){var w=E("div"),fb=E("div","fb"),o=E("div","opts");w.appendChild(E("div","q",q.q));
+q.o.forEach(function(x,i){var z=E("button",0,x[0]);z.onclick=function(){fb.textContent=x[1];if(i==q.a){z.className="ok";Array.prototype.forEach.call(o.children,function(y){y.disabled=true});if(++n==s.q.length)setTimeout(d,700)}else{z.className="bad"}};o.appendChild(z)});
+w.appendChild(o);w.appendChild(fb);b.appendChild(w)})}
+};
+document.getElementById("again").onclick=function(){build();window.scrollTo({top:0,behavior:"smooth"})};
+build();
+</script>
+</body>
+</html>

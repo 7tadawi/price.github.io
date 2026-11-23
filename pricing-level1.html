@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>رحلة التسعير التفاعلية</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--tx:#1c2430;--mu:#6b7686;--pr:#0f766e;--prs:#ccfbf1;--ok:#15803d;--oks:#dcfce7;--bad:#b91c1c;--bads:#fee2e2;--bd:#e2e6ec;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10151c;--card:#1a212b;--tx:#e8edf3;--mu:#9aa6b6;--pr:#2dd4bf;--prs:#134e4a;--ok:#4ade80;--oks:#14532d;--bad:#f87171;--bads:#4c1d1d;--bd:#2b3441;color-scheme:dark}}
+*{box-sizing:border-box}
+html{scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Tahoma,"Segoe UI",system-ui,sans-serif;line-height:1.8}
+header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--card);border-bottom:1px solid var(--bd);padding:10px 16px;z-index:5}
+header b{font-size:15px}
+.bar{height:8px;background:var(--bd);border-radius:9px;margin-top:6px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--pr);transition:width .5s}
+main{max-width:680px;margin:0 auto;padding:16px}
+.intro{background:var(--prs);border-radius:14px;padding:14px 16px;margin-bottom:14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px 16px;margin-bottom:14px}
+.card.lock{opacity:.5}
+.card.lock .b{display:none}
+.h{display:flex;align-items:center;gap:10px}
+.h h2{font-size:17px;margin:0;flex:1}
+.n{width:30px;height:30px;border-radius:50%;background:var(--pr);color:var(--card);display:grid;place-items:center;font-weight:700;flex:none}
+.ic{font-size:18px}
+.card:not(.lock):not(.done) .ic{display:none}
+.card.done .n{background:var(--ok)}
+.b p{margin:10px 0}
+.b .ex{background:var(--bg);border-radius:10px;padding:8px 12px;font-size:14px;color:var(--mu)}
+button{font:inherit;cursor:pointer;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;padding:9px 12px;text-align:start}
+button.go{background:var(--pr);color:var(--card);border:0;font-weight:700;width:100%;text-align:center;margin-top:10px}
+button:disabled{opacity:.45;cursor:not-allowed}
+.opts{display:grid;gap:8px;margin:8px 0}
+.opts button.ok{background:var(--oks);border-color:var(--ok)}
+.opts button.bad{background:var(--bads);border-color:var(--bad)}
+.fb{font-size:14px;margin:4px 0 10px;min-height:1px}
+.q{font-weight:700;margin-top:12px}
+label{display:block;font-size:14px;margin-top:10px}
+input[type=range]{width:100%;accent-color:var(--pr)}
+.out{background:var(--prs);border-radius:10px;padding:10px 12px;margin-top:10px;font-weight:700}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tabs button{padding:6px 10px;font-size:14px}
+.tabs button.on{background:var(--prs);border-color:var(--pr)}
+.tabs button.seen::after{content:" ✓";color:var(--ok)}
+.panel{background:var(--bg);border-radius:10px;padding:10px 12px;margin-top:10px;font-size:14px;min-height:60px}
+.fin{text-align:center;background:var(--oks);border-radius:14px;padding:18px;display:none}
+.fin.show{display:block}
+</style>
+</head>
+<body>
+<header><b>رحلة التسعير: <span id="pc">0</span> / 9</b><div class="bar"><i id="pb"></i></div></header>
+<main>
+<div class="intro">اقرأ كل مرحلة ثم تفاعل معها لتُفتح المرحلة التالية. تسع مراحل تنقلك من أساسيات التسعير إلى قوة التسعير.</div>
+<div id="list"></div>
+<div class="fin" id="fin"><h2>🏆 أتممت الرحلة</h2><p>صار لديك خريطة كاملة لطرق التسعير: التكلفة، المنافسون، القيمة، النفسية، الاستراتيجية، النماذج الحديثة، الخدمات، وقوة التسعير، والتفاوض على السعر.</p><button class="go" id="again">ابدأ من جديد</button></div>
+</main>
+<script>
+var S=[
+{t:"التسعير على أساس التكلفة",k:"calc",p:"تحسب تكلفة المنتج الكاملة ثم تضيف هامش ربح ثابتاً. بسيطة وتحميك من الخسارة، لكنها تتجاهل ما يستعد العميل لدفعه. تناسب المقاولات والمشاريع المخصصة.",ex:"مثال: تكلفة 80 + هامش 40% = 112 ريالاً."},
+{t:"التسعير على أساس المنافسين",k:"quiz",p:"تحدد سعرك بناءً على السوق: بمستواه، أو أقل منه للدخول، أو أعلى منه للتمييز. خطره الوقوع في حروب أسعار.",q:[{q:"مقهى جديد في حي فيه 5 مقاهٍ تبيع القهوة بـ 18 ريالاً، وقهوته مميزة بمحمصة خاصة. ما أنسب سعر؟",o:[["12 ريالاً","سعر أقل بكثير يستنزف ربحك ويدخلك حرب أسعار."],["18 ريالاً","مقبول، لكنه يهدر تميّزك."],["22 ريالاً","صحيح: التميز الحقيقي يبرر سعراً أعلى من السوق."]],a:2}]},
+{t:"التسعير على أساس القيمة",k:"quiz",p:"تسعّر حسب القيمة التي يجنيها العميل لا حسب تكلفتك. هي الأقوى في الأرباح، وتناسب الاستشارات والبرمجيات والخدمات المتخصصة.",q:[{q:"برنامجك يوفر على الشركة 500 ألف ريال سنوياً وتكلفتك 50 ألفاً. أي سعر أنسب؟",o:[["60 ألفاً","هذا تسعير بالتكلفة، وتترك على الطاولة مبلغاً كبيراً."],["150 ألفاً","صحيح: العميل يربح 350 ألفاً وتأخذ حصة عادلة."],["500 ألف","لا يبقى للعميل أي مكسب، فلن يشتري."]],a:1}]},
+{t:"التسعير النفسي",k:"flip",p:"أحياناً يقرر العقل بالانطباع لا بالحساب. اضغط كل بطاقة لتكتشف الحيلة.",c:[["السعر 99","يبدو أقل بكثير من 100 لأن العقل يقرأ الرقم الأول."],["التثبيت","عرض باقة بـ 5,000 بجانب أخرى بـ 2,000 يجعل الثانية تبدو معقولة."],["الاستدراج","باقات 100 / 180 / 200: الأخيرة تبدو أفضل صفقة."]]},
+{t:"التسعير الاستراتيجي",k:"quiz",p:"الاختراق: سعر منخفض للدخول ثم الرفع. القشط: سعر مرتفع للمتحمسين ثم الخفض. الخسارة القائدة: سلعة رخيصة تجذب العميل لبقية السلع. طابق كل حالة بطريقتها.",q:[{q:"تطبيق توصيل جديد يريد جذب مستخدمين بسرعة.",o:[["الاختراق","صحيح."],["القشط","لا، القشط يعني سعراً مرتفعاً أولاً."],["الخسارة القائدة","لا، هذه لسلعة تجذب إلى سلع أخرى."]],a:0},{q:"هاتف بتقنية جديدة لعشاق التقنية المتحمسين.",o:[["الاختراق","لا، الجمهور مستعد للدفع أكثر."],["القشط","صحيح."],["الخسارة القائدة","لا."]],a:1},{q:"سوبرماركت يخفض سعر الحليب بشدة ليجذب الزبائن لبقية السلع.",o:[["الاختراق","لا."],["القشط","لا."],["الخسارة القائدة","صحيح."]],a:2}]},
+{t:"نماذج التسعير الحديثة",k:"tabs",p:"اضغط كل نموذج لتقرأه.",c:[["الباقات","جمع عدة منتجات في عرض واحد بسعر أقل من مجموعها منفردة."],["الاشتراك","دفع دوري مقابل استفادة مستمرة، يمنحك إيراداً متكرراً متوقعاً."],["Freemium","نسخة مجانية محدودة ونسخة مدفوعة أوسع، وتنجح حين تكون تكلفة المجاني منخفضة."],["الديناميكي","السعر يتغير حسب الطلب والوقت والمخزون، مثل الطيران والفنادق."],["الطبقي","مستويات (أساسي، احترافي، مؤسسي) ليختار كل عميل ما يناسبه."],["بالاستخدام","تدفع بقدر ما تستهلك، مثل الكهرباء والحوسبة السحابية."]]},
+{t:"التسعير في الخدمات الاستشارية",k:"quiz",p:"الخدمة غير ملموسة وقيمتها تختلف من عميل لآخر. الخيارات: بالساعة، بالمشروع، بالقيمة، بالاشتراك الاستشاري (Retainer)، أو بالأداء.",q:[{q:"استشاري يريد دخلاً شهرياً ثابتاً وعلاقة طويلة مع العميل.",o:[["بالساعة","يعاقب الكفاءة: كلما أنجزت أسرع قلّ دخلك."],["Retainer","صحيح: مبلغ شهري ثابت مقابل خدمة وإتاحة مستمرتين."],["بالأداء","دخله هنا غير مستقر."]],a:1},{q:"عميل يريد ربط الأتعاب بالنتائج التي تتحقق فعلاً.",o:[["بالأداء","صحيح: جزء من الأتعاب مرتبط بمؤشرات متفق عليها."],["بالساعة","لا يربط الأتعاب بالنتائج."],["Retainer","ثابت ولا يرتبط بالنتائج."]],a:0}]},
+{t:"قوة التسعير",k:"impact",p:"قوة التسعير هي قدرتك على رفع السعر دون خسارة العملاء. جرّب الأثر على ربح منتج سعره 100 وهامشه 20%: حرّك الشريط بين الرفع والخفض."},
+{t:"التفاوض على السعر: الرد على «السعر غالي»",k:"quiz",p:"الاعتراض على السعر غالباً اعتراض على القيمة المُدركة لا على الرقم نفسه. الترتيب المحترف: افهم سبب الاعتراض، أعد تأطير القيمة، ثم قدّم خيارات، ولا تتنازل إلا بمقايضة.",ex:"قاعدة: لا تخفض السعر مجاناً أبداً. كل تنازل يقابله تنازل من العميل.",q:[{q:"قال العميل: عرضك أعلى من منافس بنسبة 30%. ما أفضل رد أولاً؟",o:[["سأخفض 30% فوراً","تعلّم العميل أن سعرك قابل للمساومة، وتخسر هامشك قبل أن تفهم المشكلة."],["ما الذي تقارنه بالضبط؟ دعنا نقارن النطاق والنتائج.","صحيح: الأسئلة تكشف إن كان الفرق في النطاق أو الجودة أو الضمان، وتعيد الحوار إلى القيمة."],["جودتنا أفضل ببساطة","ادعاء بلا دليل، ولا يغيّر نظرة العميل للسعر."]],a:1},{q:"أصرّ العميل أن ميزانيته أقل من عرضك. ما أنسب خطوة؟",o:[["تخفيض السعر مع بقاء النطاق نفسه","تقدّم الجهد نفسه بأقل، فتهدم قيمتك وتضرّ ربحيتك."],["اقتراح نطاق أو باقة أصغر تناسب ميزانيته","صحيح: السعر يتبع النطاق، فتحافظ على قيمتك وتمنحه خياراً."],["إنهاء النقاش فوراً","تخسر فرصة يمكن إنقاذها بتعديل النطاق."]],a:1},{q:"قررت منح خصم. مقابل ماذا؟",o:[["مقابل لا شيء، لتكسب رضاه","التنازل المجاني يرفع سقف توقعاته في كل صفقة قادمة."],["مقابل دفعة مقدمة أو التزام أطول أو نطاق أقل","صحيح: المقايضة تحمي الهامش وتعطيك شيئاً حقيقياً مقابل الخصم."],["مقابل وعد بمشاريع مستقبلية غير مكتوبة","وعود غير موثقة لا تحمي ربحك الآن."]],a:1}]}
+];
+var cur=0,doneN=0,list=document.getElementById("list");
+function E(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e}
+function build(){
+list.innerHTML="";cur=0;doneN=0;upd();document.getElementById("fin").classList.remove("show");
+S.forEach(function(s,i){var c=E("section","card"+(i?" lock":""),'<div class="h"><span class="n">'+(i+1)+'</span><h2>'+s.t+'</h2><span class="ic">'+(i?"🔒":"")+'</span></div>');c.appendChild(E("div","b"));list.appendChild(c)});
+open(0)}
+function open(i){var c=list.children[i];c.classList.remove("lock");c.querySelector(".ic").textContent="";var b=c.querySelector(".b"),s=S[i];
+b.appendChild(E("p",0,s.p));if(s.ex)b.appendChild(E("div","ex",s.ex));
+R[s.k](b,s,function(){finish(i)})}
+function finish(i){var c=list.children[i];c.classList.add("done");var ic=c.querySelector(".ic");ic.textContent="✅";ic.style.display="block";doneN++;upd();
+if(i+1<S.length){open(i+1);setTimeout(function(){list.children[i+1].scrollIntoView({behavior:"smooth"})},250)}else{var f=document.getElementById("fin");f.classList.add("show");setTimeout(function(){f.scrollIntoView({behavior:"smooth"})},250)}}
+function upd(){document.getElementById("pc").textContent=doneN;document.getElementById("pb").style.width=(doneN/S.length*100)+"%"}
+function btn(b,txt,fn,dis){var x=E("button","go",txt);x.disabled=!!dis;x.onclick=function(){x.disabled=true;x.style.display="none";fn()};b.appendChild(x);return x}
+var R={
+calc:function(b,s,d){var w=E("div",0,'<label>تكلفة المنتج: <b id="cv">80</b> ريال<input type="range" id="c" min="20" max="200" value="80"></label><label>هامش الربح: <b id="mv">40</b>%<input type="range" id="m" min="10" max="100" value="40"></label><div class="out" id="po"></div>');b.appendChild(w);
+var t={c:0,m:0},g=btn(b,"اعتمد هذا السعر",d,1);
+function u(){var c=+w.querySelector("#c").value,m=+w.querySelector("#m").value;w.querySelector("#cv").textContent=c;w.querySelector("#mv").textContent=m;w.querySelector("#po").textContent="سعر البيع = "+Math.round(c*(1+m/100))+" ريال"}
+["c","m"].forEach(function(k){w.querySelector("#"+k).oninput=function(){t[k]=1;u();g.disabled=!(t.c&&t.m)}});u();b.appendChild(E("div","fb","حرّك الشريطين معاً لتفتح الزر."))},
+quiz:function(b,s,d){var n=0;s.q.forEach(function(q){var w=E("div"),fb=E("div","fb"),o=E("div","opts");w.appendChild(E("div","q",q.q));
+q.o.forEach(function(x,i){var z=E("button",0,x[0]);z.onclick=function(){fb.textContent=x[1];if(i==q.a){z.className="ok";Array.prototype.forEach.call(o.children,function(y){y.disabled=true});if(++n==s.q.length)setTimeout(d,700)}else{z.className="bad"}};o.appendChild(z)});
+w.appendChild(o);w.appendChild(fb);b.appendChild(w)})},
+flip:function(b,s,d){var n=0,g=E("div","opts");s.c.forEach(function(x){var z=E("button",0,"🃏 "+x[0]);z.onclick=function(){if(!z.dataset.s){z.dataset.s=1;n++}z.className="ok";z.innerHTML="<b>"+x[0]+"</b><br>"+x[1];if(n==s.c.length)setTimeout(d,900)};g.appendChild(z)});b.appendChild(g)},
+tabs:function(b,s,d){var n=0,t=E("div","tabs"),p=E("div","panel","اختر نموذجاً من الأعلى.");s.c.forEach(function(x){var z=E("button",0,x[0]);z.onclick=function(){Array.prototype.forEach.call(t.children,function(y){y.classList.remove("on")});z.classList.add("on");p.textContent=x[1];if(!z.classList.contains("seen")){z.classList.add("seen");n++}if(n==s.c.length)setTimeout(d,900)};t.appendChild(z)});b.appendChild(t);b.appendChild(p)},
+impact:function(b,s,d){var w=E("div",0,'<label>تغيير السعر: <b id="pv">0</b>%<input type="range" id="p" min="-10" max="10" value="0"></label><div class="out" id="io">حرّك الشريط</div>');b.appendChild(w);var g=btn(b,"فهمت الفكرة",d,1),mv=0;
+w.querySelector("#p").oninput=function(){var p=+this.value,o=w.querySelector("#io");w.querySelector("#pv").textContent=p;
+if(p>0){o.textContent="رفع السعر "+p+"% دون خسارة عملاء يرفع الربح "+(p*5)+"%.";mv|=1}
+else if(p<0){var x=-p;o.textContent="خفض السعر "+x+"% يتطلب زيادة المبيعات "+Math.round(x/(20-x)*100)+"% لتعويض الخسارة.";mv|=2}
+else o.textContent="حرّك الشريط";g.disabled=mv!=3}}
+};
+document.getElementById("again").onclick=function(){build();window.scrollTo({top:0,behavior:"smooth"})};
+build();
+</script>
+</body>
+</html>
